@@ -19,6 +19,8 @@ G:\6do项目
 ├── extract_multi_user.py
 └── format_final.py
 
+实际目录可以根据使用情况修改，但是必须保证结构如上
+
 ## 使用说明
 
 ### 1. 数据抓取工具 (extract_chat_from_forum.py)
@@ -141,3 +143,4 @@ G:\6do项目
 
 
  建议定期清理中间文件(CSV输入和CSV合并输出)
+
