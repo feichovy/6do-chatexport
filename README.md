@@ -29,7 +29,7 @@ G:\6do项目
 
 **使用方法**：
  
- 请先根据实际帖子修改BASE_URL和MAX_PAGES，然后保存运行
+ 请先根据实际帖子修改BASE_URL和MAX_PAGES，然后Ctrl+S保存运行
 
  python extract_chat_from_forum.py
 
@@ -143,5 +143,6 @@ G:\6do项目
 
 
  建议定期清理中间文件(CSV输入和CSV合并输出)
+
 
 
