@@ -9,15 +9,15 @@
 3. **PDF生成**：`format_final.py` - 为每个用户生成PDF格式的聊天记录
 
 ## 文件结构
- G:\6do项目
- ├── CSV输入/ # 原始抓取的聊天记录CSV
- ├── CSV合并输出/ # 按用户合并后的CSV
- ├── PDF输出/ # 最终生成的PDF文件
- ├── fonts/ # 字体文件目录
- │ └── NotoSansSC-Regular.ttf
- ├── extract_chat_from_forum.py
- ├── extract_multi_user.py
- └── format_final.py
+G:\6do项目
+├── CSV输入/ # 原始抓取的聊天记录CSV
+├── CSV合并输出/ # 按用户合并后的CSV
+├── PDF输出/ # 最终生成的PDF文件
+├── fonts/ # 字体文件目录
+│ └── NotoSansSC-Regular.ttf
+├── extract_chat_from_forum.py
+├── extract_multi_user.py
+└── format_final.py
 
 ## 使用说明
 
@@ -138,5 +138,6 @@
  确保字体文件已放置在正确位置
 
  大量数据抓取时请合理设置线程数(MAX_WORKERS)
+
 
  建议定期清理中间文件(CSV输入和CSV合并输出)
