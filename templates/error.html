@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>错误 - 聊天记录导出工具</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container error-container">
+        <h1>导出过程中发生错误</h1>
+        <div class="error-message">{{ error }}</div>
+        <a href="{{ url_for('index') }}" class="back-button">返回首页</a>
+    </div>
+</body>
+</html>
