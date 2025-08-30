@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify, send_file, render_template
 from flask_cors import CORS
 import os
 import pandas as pd
-from datetime import datetime
+from datetime import date, datetime, timedelta
 from export_utils import PDFGenerator
 from config import get_user_config
 import json
@@ -131,6 +131,19 @@ def get_available_dates():
         })
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
+
+def home():
+    return render_template("index.html")  # 确认 templates 下有 index.html
+
+@app.route("/")
+def index():
+    today = date.today()
+    one_year_ago = today - timedelta(days=365)
+    return render_template(
+        "index.html",
+        min_date=one_year_ago.strftime("%Y-%m-%d"),
+        max_date=today.strftime("%Y-%m-%d")
+    )
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)
