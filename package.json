@@ -1,0 +1,22 @@
+{
+    "name": "chat-pdf-export",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+        "postinstall": "npm --prefix backend i && npm --prefix frontend i",
+        "dev": "concurrently -k -n BACK,FRONT -c cyan,magenta \"npm:dev:backend\" \"npm:dev:frontend\"",
+        "dev:backend": "npm --prefix backend run dev",
+        "dev:frontend": "npm --prefix frontend run dev",
+        "build": "npm --prefix frontend run build",
+        "start": "concurrently -k -n BACK,FRONT -c cyan,magenta \"npm:start:backend\" \"npm:start:frontend\"",
+        "start:backend": "npm --prefix backend run start",
+        "start:frontend": "npm --prefix frontend run start",
+        "lint": "npm --prefix frontend run lint"
+    },
+    "devDependencies": {
+        "concurrently": "^8.2.2"
+    },
+    "engines": {
+        "node": ">=18"
+    }
+}
