@@ -10,9 +10,7 @@ type State = {
     error?: string;
 };
 
-type DateRange = { min?: string; max?: string };
-
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE || ''; // 有值→直连；无值→走 Next rewrites
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE || '';
 
 function fmt(d: Date) {
     const y = d.getFullYear();
@@ -37,24 +35,6 @@ export default function ExportForm() {
         to: toDefault,
         loading: false,
     });
-
-    const [range, setRange] = React.useState<DateRange>({});
-
-    // 可选：仿照 Flask 的 /api/available-dates，自动设置日期 min/max
-    React.useEffect(() => {
-        (async () => {
-            try {
-                const r = await fetch(`${API_BASE}/api/available-dates`);
-                if (!r.ok) return;
-                const data = await r.json();
-                if (data?.min_date || data?.max_date) {
-                    setRange({ min: data.min_date, max: data.max_date });
-                }
-            } catch {
-                // 后端没有该接口也不报错，保持静默
-            }
-        })();
-    }, []);
 
     async function onSubmit(e: React.FormEvent) {
         e.preventDefault();
@@ -108,104 +88,79 @@ export default function ExportForm() {
         }
     }
 
+    function onCancel() {
+        window.history.back();
+    }
+
     return (
-        <div className="mx-auto w-full max-w-3xl">
-            {/* 顶部淡色提示条（模仿 Flask 页的轻提示） */}
-            <div className="mb-4 rounded border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-600">
-                无需选择频道或 CSV，系统会自动遍历所有数据（均属于「六度世界聊天区」）。
+        <form onSubmit={onSubmit} className="grid gap-5">
+            {/* 用户名 */}
+            <div>
+                <label className="mb-1 block text-sm font-medium text-slate-700">用户名</label>
+                <input
+                    className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-800 shadow-sm outline-none transition focus:border-blue-600"
+                    placeholder="请输入要导出的用户名"
+                    value={state.user}
+                    onChange={(e) => setState((s) => ({ ...s, user: e.target.value }))}
+                />
             </div>
 
-            {/* 卡片（Bootstrap 风） */}
-            <div className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
-                {/* 卡片头 */}
-                <div className="border-b border-slate-200 px-5 py-3">
-                    <h2 className="text-[15px] font-medium text-slate-800">导出参数</h2>
-                    <p className="mt-1 text-xs text-slate-500">
-                        仅输入<strong className="font-medium">用户名</strong>与<strong className="font-medium">日期范围</strong>即可导出 PDF。
-                    </p>
+            {/* 日期范围 */}
+            <div>
+                <label className="mb-1 block text-sm font-medium text-slate-700">日期范围</label>
+                <div className="flex items-center gap-2">
+                    <input
+                        type="date"
+                        className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-800 shadow-sm outline-none transition focus:border-blue-600"
+                        value={state.from}
+                        onChange={(e) => setState((s) => ({ ...s, from: e.target.value }))}
+                    />
+                    <span className="text-slate-500">至</span>
+                    <input
+                        type="date"
+                        className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-800 shadow-sm outline-none transition focus:border-blue-600"
+                        value={state.to}
+                        onChange={(e) => setState((s) => ({ ...s, to: e.target.value }))}
+                    />
                 </div>
+                <p className="mt-1 text-xs text-slate-500">默认最近 60 天，可留空表示不限制。</p>
+            </div>
 
-                {/* 表单体 */}
-                <form onSubmit={onSubmit} className="px-5 py-4">
-                    {/* 表单组：用户名 */}
-                    <div className="mb-4">
-                        <label className="mb-1 block text-xs font-medium text-slate-700">
-                            用户名 <span className="text-rose-500">*</span>
-                        </label>
-                        <input
-                            className="w-full rounded border border-slate-300 bg-white px-3 py-2 text-sm text-slate-800 outline-none transition focus:border-blue-600"
-                            placeholder="请输入用户名"
-                            value={state.user}
-                            onChange={(e) => setState((s) => ({ ...s, user: e.target.value }))}
-                        />
-                    </div>
+            {/* 错误提示 */}
+            {state.error && (
+                <div className="rounded-md border border-rose-200 bg-rose-50 px-3 py-2 text-xs text-rose-700">
+                    {state.error}
+                </div>
+            )}
 
-                    {/* 表单组：日期范围（两列） */}
-                    <div className="mb-4 grid gap-4 md:grid-cols-2">
-                        <div>
-                            <label className="mb-1 block text-xs font-medium text-slate-700">开始日期</label>
-                            <input
-                                type="date"
-                                min={range.min}
-                                max={range.max}
-                                className="w-full rounded border border-slate-300 bg-white px-3 py-2 text-sm text-slate-800 outline-none transition focus:border-blue-600"
-                                value={state.from}
-                                onChange={(e) => setState((s) => ({ ...s, from: e.target.value }))}
-                            />
-                            <p className="mt-1 text-[11px] text-slate-400">默认最近 60 天</p>
-                        </div>
-                        <div>
-                            <label className="mb-1 block text-xs font-medium text-slate-700">结束日期</label>
-                            <input
-                                type="date"
-                                min={range.min}
-                                max={range.max}
-                                className="w-full rounded border border-slate-300 bg-white px-3 py-2 text-sm text-slate-800 outline-none transition focus:border-blue-600"
-                                value={state.to}
-                                onChange={(e) => setState((s) => ({ ...s, to: e.target.value }))}
-                            />
-                            <p className="mt-1 text-[11px] text-slate-400">可留空代表无上限</p>
-                        </div>
-                    </div>
-
-                    {/* 错误提示条（淡红） */}
-                    {state.error && (
-                        <div className="mb-4 rounded border border-rose-200 bg-rose-50 px-3 py-2 text-xs text-rose-700">
-                            {state.error}
-                        </div>
+            {/* ✅ ✅ ✅ 底部操作按钮（主按钮在右，取消在左） */}
+            <div className="mt-4 flex justify-end space-x-3">
+                {/* 先导出按钮 */}
+                <button
+                    type="submit"
+                    disabled={state.loading || !state.user.trim()}
+                    className={`inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow hover:bg-blue-700 disabled:bg-slate-300 disabled:cursor-not-allowed`}
+                >
+                    {state.loading && (
+                        <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+                        </svg>
                     )}
+                    {state.loading ? '正在导出…' : '导出PDF'}
+                </button>
 
-                    {/* 动作区 */}
-                    <div className="flex items-center gap-3">
-                        <button
-                            type="submit"
-                            disabled={state.loading || !state.user.trim()}
-                            className={`inline-flex items-center gap-2 rounded bg-[#0d6efd] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#0b5ed7] disabled:cursor-not-allowed disabled:bg-slate-300`}
-                        >
-                            {state.loading && (
-                                <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
-                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
-                                </svg>
-                            )}
-                            {state.loading ? '正在导出…' : '导出 PDF'}
-                        </button>
-
-                        <span className="text-[12px] text-slate-500">
-                            PDF 将自动清理用户名冗余并合并相邻短分片。
-                        </span>
-                    </div>
-                </form>
-
-                {/* 卡片脚（说明） */}
-                <div className="border-t border-slate-200 px-5 py-3">
-                    <p className="text-[11px] leading-relaxed text-slate-500">
-                        若后端提供 <code className="rounded bg-slate-100 px-1">/api/available-dates</code>，日期控件会自动设置可选范围；
-                        否则仍可手动输入日期。
-                    </p>
-                </div>
+                {/* 再取消按钮（在左） */}
+                <button
+                    type="button"
+                    onClick={onCancel}
+                    className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                >
+                    取消
+                </button>
             </div>
-        </div>
+
+        </form>
     );
 }
 
