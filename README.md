@@ -90,6 +90,17 @@ NEXT_PUBLIC_API_BASE=http://localhost:5001
 直连时后端需允许 CORS（server.js 使用 cors()）。
 组件会优先读取 NEXT_PUBLIC_API_BASE，否则回退到 /api/... 由 Next 代理。
 
+## ⚙️ 前端样式Tailwind CSS（v4）安装与配置（必须确保执行）
+⚠️ Tailwind v4 与旧版本安装方式不同，不需要 npx tailwindcss init -p，也不能再使用 tailwindcss: {} 作为 PostCSS 插件名。
+
+# 安装依赖
+
+在 frontend/ 目录执行（建议先卸载旧版本）：
+
+cd frontend
+npm uninstall tailwindcss postcss autoprefixer
+npm install -D tailwindcss @tailwindcss/postcss autoprefixer
+
 
 ## 🚀 启动
 
@@ -262,5 +273,6 @@ npm start       # 默认 3000
 
 
 ## 🙌 致谢
+
 
 pdfkit / csv-parser / Next.js / Noto Sans SC
