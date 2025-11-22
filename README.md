@@ -20,7 +20,7 @@
 
 🔹 2. 一键爬虫（Crawler）
 集成爬虫脚本：
-# extract_chat_from_forum.py
+extract_chat_from_forum.py
 前端点击 “启动爬虫”，输入帖子 URL，后端自动：
 调用 Python 脚本爬取帖子所有楼层
 自动探测最大楼层（含 2 段智能探测算法）
@@ -229,5 +229,6 @@ OPENAI_API_KEY=
 OPENAI_BASE_URL=
 
 ## 🙌 致谢
+
 
 Next.js, Express, pdfkit, TailwindCSS, Noto Sans SC, BeautifulSoup4
