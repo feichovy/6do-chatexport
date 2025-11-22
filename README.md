@@ -54,7 +54,7 @@ chat-pdf-export-nextjs/
 │   │   ├── routes/
 │   │   │   ├── export.js
 │   │   │   ├── digest.js
-│   │   │   └── crawl.js          ← 新增：爬虫 API
+│   │   │   └── crawl.js          ← 爬虫 API
 │   │   ├── utils/
 │   │   │   ├── csvLoader.js
 │   │   │   ├── PDFGenerator.js   ← 新版摘要标题逻辑
@@ -232,3 +232,4 @@ OPENAI_BASE_URL=
 
 
 Next.js, Express, pdfkit, TailwindCSS, Noto Sans SC, BeautifulSoup4
+
