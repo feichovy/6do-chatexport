@@ -4,6 +4,7 @@ import cors from 'cors';
 import fs from 'fs';
 import availableDatesRouter from './routes/availableDates.js';
 import digestRouter from './routes/digest.js';
+import crawlerRouter from './routes/crawler.js';
 import path from 'path';
 
 import { PORT, EXPORT_DIR, UPLOAD_DIR, DATA_DIR } from './config.js';
@@ -19,6 +20,7 @@ app.use(cors({
 app.use(express.json());
 app.use('/api/available-dates', availableDatesRouter);
 app.use('/api', digestRouter);
+app.use('/api/crawler', crawlerRouter);
 
 // 确保关键目录存在
 const ensureDir = (dirPath) => {
